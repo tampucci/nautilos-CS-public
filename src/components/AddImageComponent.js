@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 //import * as MediaLibrary from 'expo-media-library';
 import { FontAwesome } from '@expo/vector-icons';
 
-const AddImageComponent = ({ navigation, type }) => {
+const AddImageComponent = ({ route, navigation, type }) => {
 
     const { state, addImage, addMediaLibraryPermission } = useContext(AddDataContext)
     const [errorMsg, setErrorMsg] = useState(null);
@@ -80,9 +80,9 @@ const AddImageComponent = ({ navigation, type }) => {
     return (
         <View>
             <View style={type === 'mandatory' ? styles.mandatoryImageContainer : styles.imageContainer}>
-                {navigation.getParam('image') === undefined ?
+                {route.params?.image === undefined ?
                     <FontAwesome name="image" size={60} color="black" style={styles.imageIcon} /> :
-                    <Image source={{ uri: navigation.getParam('image') }} style={styles.image} />}
+                    <Image source={{ uri: route.params?.image }} style={styles.image} />}
             </View>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button} onPress={openImagePickerAsync}>

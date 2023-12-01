@@ -46,17 +46,6 @@ const DecreaseIncreaseComponent = ({ element, values, index, backgroundColor, ca
         callback(nextPlastic);
     }
 
-    /*<TextInput
-        value={values[index].toString()}
-        style={styles.textInput}
-        onChangeText={(value) => changeValue(index, value)}
-        textAlign={'center'}
-        placeholder="Length"
-        placeholderTextColor="#667"
-        keyboardType="numeric"
-    />
-    <Text style={styles.text}>{values[index]}</Text>*/
-
     return (
         <View style={backgroundColor == 'white' ? styles.quantityContainerWhite : styles.quantityContainer} key={index}>
             <Text style={styles.text}>{element}: </Text>
@@ -85,8 +74,6 @@ const DecreaseIncreaseComponent = ({ element, values, index, backgroundColor, ca
 const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
-        /*borderColor: 'red',
-        borderWidth: 1*/
     },
     buttonText: {
         fontSize: 20,

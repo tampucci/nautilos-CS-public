@@ -1,7 +1,7 @@
 import React from 'react' 
 import {View, Text, StyleSheet} from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Entypo } from '@expo/vector-icons';
 
 const SelectElement = ({data, placeholder, type, callback}) => {
 
@@ -21,7 +21,7 @@ const SelectElement = ({data, placeholder, type, callback}) => {
                     defaultButtonText={placeholder}
                     renderDropdownIcon={(isOpened) => {
                         return (
-                            <FontAwesome
+                            <Entypo
                                 name={isOpened ? "chevron-up" : "chevron-down"}
                                 color={"#444"}
                                 size={18}
