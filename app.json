@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "nautilos-CitizenScience",
+    "name": "Nautilos Citizen Science",
     "slug": "nautilos-CitizenScience",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Nautilos_logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/nautilos_splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Nautilos_logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.marco.tampucci.nautiloscitizenscience"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eb6fa8c4-c8ec-4b52-8c03-21706d8ad3b0"
+      }
     }
   }
 }
