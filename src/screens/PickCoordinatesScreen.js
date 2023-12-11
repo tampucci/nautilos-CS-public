@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import MapView, { Callout, Marker } from 'react-native-maps'
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import MapView, { Marker } from 'react-native-maps'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Context as AddDataContext } from '../context/AddDataContext'
 
 const PickCoordinatesScreen = ({ route, navigation }) => {

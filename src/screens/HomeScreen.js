@@ -23,14 +23,17 @@ const HomeScreen = ({ route, navigation }) => {
             if (locationStatus.status !== 'granted') {
                 setErrorMsg('Permission to access location was denied');
                 return;
-            }
-            let locationTmp = await Location.getCurrentPositionAsync({});
-            setLocation(locationTmp);
+            }9
+            setLocation(await Location.getCurrentPositionAsync({}))
+            /*await Location.getCurrentPositionAsync({}).then((location) => {
+                setLocation(location)
+            })*/
 
             await getPlastics(username)
             await getDiverCampaigns(username)
             await getImageAnnotations(username)
             await getAlgalBlooms(username)
+            //setLocation(locationTmp);
             setReportNumber(reportState.sentReport)            
         })();
     }, [state.report_n]);

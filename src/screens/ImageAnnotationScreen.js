@@ -1,53 +1,55 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import Checkbox from 'expo-checkbox';
 import SelectElement from '../components/SelectElement';
-import DateInput from '../components/DateInput';
+import DateInput from './../components/DateInput';
+import AddImageComponent from '../components/AddImageComponent';
 import CoordinateInput from '../components/CoordinateInput';
 import AddReport from '../hooks/AddReport';
 import { Context as AddDataContext } from '../context/AddDataContext'
 
-const AddPlasticCampaignScreen = ({ route, navigation }) => {
+const ImageAnnotation = ({ route, navigation }) => {
 
-    const [campaignName, setCamapaignName] = useState('')
+    const [species, setSpecies] = useState('')
+    const [quantity, setQuantity] = useState('')
     const [date, setDate] = useState(new Date())
     const [location, setLocation] = useState('')
-    const [contributor, setContributor] = useState('')
-    const [beach, setBeach] = useState('')
-    const [beachCode, setBeachCode] = useState('')
-    const [beachAmendment, setAmendment] = useState(false)
-    const [surveyedWidth, setSurveyedWidth] = useState('')
-    const [surveyedLength, setSurveyedLength] = useState('')
-    const [surrounding, setSurrounding] = useState('')
-    const [sediment, setSediment] = useState('')
+    const [depth, setDepth] = useState('')
+    const [seaLevel, setSeaLevel] = useState('')
+    const [bottomType, setBottomType] = useState('')
     const [weather, setWeather] = useState('')
-    const [errorMsg, setErrorMsg] = useState('')
+    const [errorMsg, setErrorMsg] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const [addPlasticCampaignApi] = new AddReport
-
-    const { state, addResponse, addNavigateBack } = useContext(AddDataContext)
+    const [, , , addImageAnnotationApi] = new AddReport
 
     const [latitude, setLatitude] = useState(route.params.latitude)
     const [longitude, setLongitude] = useState(route.params.longitude)
 
+    const { state, addResponse, addNavigateBack } = useContext(AddDataContext)
+
     useEffect(() => {
-        addNavigateBack('AddPlasticCampaign')
+        addNavigateBack('ImageAnnotation')
         addResponse({ message: '', report_n: state.report_n })
         setLatitude(route.params.latitude)
         setLongitude(route.params.longitude)
-        console.log('Returning here: '+route.params.latitude+' - ' + route.params.longitude)
-        console.log('State: '+state.latitude+' - ' + state.longitude)
     }, [route])
 
     return (
         <ScrollView>
-            <Text style={styles.title}>Plastic Campaign</Text>
+            <Text style={styles.title}>Image Annotation</Text>
             {errorMsg !== '' ? <Text style={styles.errorMsg}>{errorMsg}</Text> : null}
+            <AddImageComponent navigation={navigation} type={'mandatory'} />
             <TextInput
                 style={styles.mandatoryInput}
-                onChangeText={setCamapaignName}
-                placeholder="Campaign name"
+                onChangeText={setSpecies}
+                placeholder="Species/taxom name*"
                 placeholderTextColor="#667"
+            />
+            <TextInput
+                style={styles.mandatoryInput}
+                onChangeText={setQuantity}
+                placeholder="Quantity*"
+                placeholderTextColor="#667"
+                keyboardType="numeric"
             />
             <DateInput type={'mandatory'} callback={(element) => setDate(element)} />
             <CoordinateInput
@@ -59,55 +61,26 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
             />
             <TextInput
                 style={styles.input}
-                onChangeText={setContributor}
-                placeholder="Contributor"
-                placeholderTextColor="#667"
-            />
-            <TextInput
-                style={styles.input}
                 onChangeText={setLocation}
                 placeholder="Location name"
                 placeholderTextColor="#667"
             />
             <TextInput
-                style={styles.mandatoryInput}
-                onChangeText={setBeach}
-                placeholder="Beach name"
-                placeholderTextColor="#667"
-            />
-            <TextInput
                 style={styles.input}
-                onChangeText={setBeachCode}
-                placeholder="Beach code"
-                placeholderTextColor="#667"
-            />
-            <View style={styles.checkboxContainer}>
-                <Checkbox style={styles.checkbox} value={beachAmendment} onValueChange={setAmendment} />
-                <Text style={styles.label}>Beach amendment</Text>
-            </View>
-            <TextInput
-                style={styles.mandatoryInput}
-                onChangeText={setSurveyedLength}
-                placeholder="Length"
-                placeholderTextColor="#667"
-                keyboardType="numeric"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={setSurveyedWidth}
-                placeholder="Width"
+                onChangeText={setDepth}
+                placeholder="Depth"
                 placeholderTextColor="#667"
                 keyboardType="numeric"
             />
             <SelectElement
-                data={state.selects_values.surrounding_types}
-                placeholder={'Surrounding type'}
-                callback={(element) => { setSurrounding(element) }}
+                data={state.selects_values.sea_levels}
+                placeholder={'Sea level'}
+                callback={(element) => { setSeaLevel(element) }}
             />
             <SelectElement
-                data={state.selects_values.sediment_types}
-                placeholder={'Sediment type'}
-                callback={(element) => { setSediment(element) }}
+                data={state.selects_values.sea_bottom_types}
+                placeholder={'Sea bottom type'}
+                callback={(element) => { setBottomType(element) }}
             />
             <SelectElement
                 data={state.selects_values.weather_types}
@@ -115,16 +88,18 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
                 callback={(element) => { setWeather(element) }}
             />
             <TouchableOpacity style={styles.button} onPress={async () => {
-                if (campaignName !== '' && date !== null && latitude !== '' && longitude !== '' && beach !== '' && surveyedLength !== '') {
+                if (state.image.uri !== '' && species !== '' && quantity !== '' && date !== null && latitude !== '' && longitude !== '') {
                     setIsLoading(true);
-                    await addPlasticCampaignApi(navigation, campaignName.trim(), date, latitude, longitude, contributor.trim(), location.trim(), beach.trim(), beachCode.trim(), beachAmendment ? 1 : 0, surveyedLength.trim(), surveyedWidth.trim(), surrounding, sediment, weather, state.username, state.edmoCode, state.authkey, setErrorMsg, setIsLoading)
+                    await addImageAnnotationApi(navigation, species, quantity.trim(), date, latitude, longitude, location, depth.trim(), seaLevel, bottomType, weather, state.image.base64, state.username, setErrorMsg, setIsLoading)
                 } else {
                     setErrorMsg('You should fill all mandatory fields')
                 }
             }}>
-                <Text style={styles.buttonText}>Add campaign</Text>
+                <Text style={styles.buttonText}>
+                    Send data
+                </Text>
             </TouchableOpacity>
-
+            
             {isLoading &&
                 <View style={styles.frontView}>
                     <ActivityIndicator size="large" color="black" style={styles.frontSpinner} />
@@ -142,19 +117,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignSelf: 'center',
         marginVertical: 10,
-        backgroundColor: 'green'
+        backgroundColor: 'green',
     },
     buttonText: {
         fontSize: 20,
         color: 'white',
         textAlign: 'center'
-    },
-    checkbox: {
-        alignSelf: 'center',
-    },
-    checkboxContainer: {
-        flexDirection: 'row',
-        alignSelf: 'center',
     },
     container: {
         flexDirection: 'row'
@@ -211,10 +179,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginVertical: 5
     },
-    label: {
-        fontSize: 20,
-        margin: 8,
-    },
     mandatoryInput: {
         borderColor: 'red',
         borderWidth: 0.5,
@@ -239,4 +203,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default AddPlasticCampaignScreen
+export default ImageAnnotation

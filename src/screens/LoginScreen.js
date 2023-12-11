@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react'
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Context as AddDataContext } from '../context/AddDataContext'
 import Login from '../hooks/Login';
+import { Feather } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -10,6 +11,7 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('')
     const [loginApi, errorMessage] = new Login
     const [errorMsg, setErrorMsg] = useState('')
+    const [viewModal, setViewModal] = useState('false')
 
 
     return (
@@ -30,6 +32,25 @@ const LoginScreen = ({ navigation }) => {
                 autoCapitalize='none'
                 placeholderTextColor="#667"
             />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={viewModal}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setViewModal(!viewModal);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setViewModal(!viewModal)}>
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
             <TouchableOpacity style={styles.button} onPress={() => {
                 (async () => {
                     if (username == '' || password == '') {
@@ -48,12 +69,52 @@ const LoginScreen = ({ navigation }) => {
             }}>
                 <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                setViewModal(!viewModal)
+                console.log("View modal: "+viewModal)
+            }} style={styles.infoIcon}>
+                <Feather name="info" size={24} color="black" />
+            </TouchableOpacity>
             <Text style={styles.version}>Version: 1.4</Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+
     button: {
         height: 30,
         width: 150,
@@ -83,6 +144,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingBottom: 10,
         textAlign: 'center',
+    },
+    infoIcon: {
+        paddingLeft: 5,
+        marginTop: 5
     },
     input: {
         borderColor: 'grey',
