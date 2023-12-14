@@ -23,7 +23,6 @@ const PickCoordinatesScreen = ({ route, navigation }) => {
                 onPress={(event) => {
                     setLatitude(Math.trunc(event.nativeEvent.coordinate.latitude* 1E7) / 1E7)
                     setLongitude(Math.trunc(event.nativeEvent.coordinate.longitude* 1E7) / 1E7)
-                    console.log(`${latitude}, ${longitude}`)
                 }}
             >
                 <Marker

@@ -7,7 +7,7 @@ import CoordinateInput from '../components/CoordinateInput';
 import AddReport from '../hooks/AddReport';
 import { Context as AddDataContext } from '../context/AddDataContext'
 
-const ImageAnnotation = ({ route, navigation }) => {
+const ImageAnnotationScreen = ({ route, navigation }) => {
 
     const [species, setSpecies] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default ImageAnnotation
+export default ImageAnnotationScreen

@@ -81,11 +81,6 @@ export default () => {
                 const replaceImageWith = '%2B';
                 image = '"data:image/png;base64,' + image.replace(searchImageRegExp, replaceImageWith) + '"'
 
-                console.log(username)
-                console.log(campaignId)
-                console.log(image)
-                console.log(authkey)
-
                 await axios({
                     method: 'post',
                     url: 'https://nautilos-app.isti.cnr.it/addPlasticImage.php',

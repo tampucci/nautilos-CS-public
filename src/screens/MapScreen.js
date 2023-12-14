@@ -30,7 +30,6 @@ const MapScreen = ({ route, navigation }) => {
 
                 //TODO adjust Callout size
                 state.plastics.map((item, index) => {
-                    console.log(item.image)
                     return (<Marker
                         coordinate={{
                             latitude: item.latitude,

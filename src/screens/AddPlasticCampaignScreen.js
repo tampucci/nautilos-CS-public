@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Checkbox from 'expo-checkbox';
 import SelectElement from '../components/SelectElement';
 import DateInput from '../components/DateInput';
 import CoordinateInput from '../components/CoordinateInput';
 import AddReport from '../hooks/AddReport';
 import { Context as AddDataContext } from '../context/AddDataContext'
+import { Feather } from '@expo/vector-icons';
+import { A } from '@expo/html-elements';
 
 const AddPlasticCampaignScreen = ({ route, navigation }) => {
 
@@ -23,6 +25,8 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
     const [weather, setWeather] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [viewAmendmentModal, setViewAmendmentModal] = useState('false')
+    const [viewBeachCodeModal, setViewBeachCodeModal] = useState('false')
     const [addPlasticCampaignApi] = new AddReport
 
     const { state, addResponse, addNavigateBack } = useContext(AddDataContext)
@@ -35,8 +39,6 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
         addResponse({ message: '', report_n: state.report_n })
         setLatitude(route.params.latitude)
         setLongitude(route.params.longitude)
-        console.log('Returning here: '+route.params.latitude+' - ' + route.params.longitude)
-        console.log('State: '+state.latitude+' - ' + state.longitude)
     }, [route])
 
     return (
@@ -75,15 +77,27 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
                 placeholder="Beach name"
                 placeholderTextColor="#667"
             />
-            <TextInput
-                style={styles.input}
-                onChangeText={setBeachCode}
-                placeholder="Beach code"
-                placeholderTextColor="#667"
-            />
+            <View style={styles.infoContainer}>
+                <TextInput
+                    style={styles.shorterInput}
+                    onChangeText={setBeachCode}
+                    placeholder="Beach code"
+                    placeholderTextColor="#667"
+                />
+                <TouchableOpacity onPress={() => {
+                    setViewBeachCodeModal(!viewBeachCodeModal)
+                }} style={styles.infoTextIcon}>
+                    <Feather name="info" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
             <View style={styles.checkboxContainer}>
                 <Checkbox style={styles.checkbox} value={beachAmendment} onValueChange={setAmendment} />
                 <Text style={styles.label}>Beach amendment</Text>
+                <TouchableOpacity onPress={() => {
+                    setViewAmendmentModal(!viewAmendmentModal)
+                }} style={styles.infoCheckIcon}>
+                    <Feather name="info" size={24} color="black" />
+                </TouchableOpacity>
             </View>
             <TextInput
                 style={styles.mandatoryInput}
@@ -125,6 +139,40 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
                 <Text style={styles.buttonText}>Add campaign</Text>
             </TouchableOpacity>
 
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={viewBeachCodeModal}
+                onRequestClose={() => {
+                    setViewBeachCodeModal(!viewBeachCodeModal);
+                }}>
+                <TouchableOpacity onPress={() => setViewBeachCodeModal(!viewBeachCodeModal)} style={styles.centeredView}>
+                    <View style={styles.modalView}>
+
+                        <Feather name="x" size={24} color="black" style={styles.closeIcon} />
+
+                        <Text style={styles.modalText}>Fill with code that can be found
+                            <A href="https://nodc.ogs.it/marinelitter/beachesmap" style={styles.href}><Text> here </Text></A>
+                            if it is not available leave the field blank</Text>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={viewAmendmentModal}
+                onRequestClose={() => {
+                    setViewAmendmentModal(!viewAmendmentModal);
+                }}>
+                <TouchableOpacity onPress={() => setViewAmendmentModal(!viewAmendmentModal)} style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Feather name="x" size={24} color="black" style={styles.closeIcon} />
+                        <Text style={styles.modalText}>Select in case another campaign has been already sent for this beach and, in the meanwhile, some beach information is changed</Text>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
+
             {isLoading &&
                 <View style={styles.frontView}>
                     <ActivityIndicator size="large" color="black" style={styles.frontSpinner} />
@@ -149,12 +197,24 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center'
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
     checkbox: {
         alignSelf: 'center',
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignSelf: 'center',
+    },
+    closeIcon: {
+        alignSelf: 'flex-end',
+        marginTop: 0,
+        paddingTop: 0,
+        marginBottom: 5
     },
     container: {
         flexDirection: 'row'
@@ -183,6 +243,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%'
     },
+    href: {
+        color: 'blue',
+        textDecorationLine: 'underline'
+    },
     image: {
         alignSelf: 'center',
         marginTop: 5,
@@ -200,6 +264,18 @@ const styles = StyleSheet.create({
     imageIcon: {
         alignSelf: 'center',
         marginTop: 5
+    },
+    infoContainer: {
+        flexDirection: 'row',
+        alignSelf: 'center'
+    },
+    infoCheckIcon: {
+        paddingLeft: 5,
+        marginTop: 10
+    },
+    infoTextIcon: {
+        paddingLeft: 5,
+        marginTop: 6
     },
     input: {
         borderColor: 'grey',
@@ -226,9 +302,39 @@ const styles = StyleSheet.create({
         color: 'black',
         marginVertical: 5
     },
+    modalText: {
+        textAlign: 'justify',
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        paddingTop: 5,
+        paddingHorizontal: 15,
+        paddingBottom: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
     paragraph: {
         fontSize: 14,
         textAlign: 'center',
+        marginVertical: 5
+    },
+    shorterInput: {
+        borderColor: 'grey',
+        borderWidth: 0.5,
+        fontSize: 18,
+        width: '62%',
+        backgroundColor: 'white',
+        textAlign: "center",
+        alignSelf: "center",
         marginVertical: 5
     },
     title: {

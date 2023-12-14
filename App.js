@@ -10,6 +10,9 @@ import PlasticsScreen from './src/screens/PlasticsScreen';
 import AddPlasticCampaignScreen from './src/screens/AddPlasticCampaignScreen';
 import PickCoordinatesScreen from './src/screens/PickCoordinatesScreen';
 import MapScreen from './src/screens/MapScreen';
+import AlgalbloomScreen from './src/screens/AlgalbloomScreen';
+import DiverScreen from './src/screens/DiverScreen';
+import ImageAnnotationScreen from './src/screens/ImageAnnotationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +27,9 @@ function App() {
             <Stack.Screen name="Campaigns" component={CampaignScreen} />
             <Stack.Screen name="AddPlasticCampaign" component={AddPlasticCampaignScreen} />
             <Stack.Screen name="Plastics" component={PlasticsScreen} />
+            <Stack.Screen name="Algalbloom" component={AlgalbloomScreen} />
+            <Stack.Screen name="Diver" component={DiverScreen} />
+            <Stack.Screen name="ImageAnnotation" component={ImageAnnotationScreen} />
             <Stack.Screen name="PickCoordinates" component={PickCoordinatesScreen} />
             <Stack.Screen name="Map" component={MapScreen} />
           </Stack.Navigator>
