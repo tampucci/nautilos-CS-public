@@ -44,8 +44,6 @@ export default () => {
                 }
             }, (error) => {
                 setIsLoading(false)
-                setErrorMsg("Campaign not added")
-                setIsLoading(false)
                 setErrorMsg("Campaign not added");
                 if (error.response) {
                     let errorResponse = error.response.data

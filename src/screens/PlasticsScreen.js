@@ -48,16 +48,16 @@ const PlasticsScreen = ({ route, navigation }) => {
                     )
                 })}
             </View>
-            
-            <AddImageComponent navigation={navigation} route={route} />
+
+            <AddImageComponent navigation={navigation} route={route} campaign={campaignName} />
 
             <TouchableOpacity style={styles.button} onPress={async () => {
                 sum = plasticQuantity.reduce((partialSum, a) => partialSum + a, 0);
                 if (sum > 0) {
                     setIsLoading(true);
                     await addPlasticApi(navigation, state.username, state.authkey, campaignName, plastic_types, plasticQuantity, surveyCode, j_codes, state.image.base64, setErrorMsg, setIsLoading)
-                    addResponse({ message: 'Report successfully added', report_n: state.report_n+1 })
-                    navigation.navigate("Home", {response: "Report successfully added"})
+                    addResponse({ message: 'Report successfully added', report_n: state.report_n + 1 })
+                    navigation.navigate("Home", { response: "Report successfully added" })
                 } else {
                     setErrorMsg('At least one value should greater than 0')
                 }
