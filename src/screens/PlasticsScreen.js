@@ -18,7 +18,7 @@ const PlasticsScreen = ({ route, navigation }) => {
     })
 
     const campaignName = route.params.campaign
-    const surveyCode = state.plastic_campaigns[state.plastic_campaigns.findIndex(item => item.plastic_campaign == campaignName)]//.campaign_id
+    const surveyCode = state.plastic_campaigns[state.plastic_campaigns.findIndex(item => item.plastic_campaign == campaignName)].campaign_id
     const [plasticQuantity, setPlasticQuantity] = useState(Array(plastic_types.length).fill(0))
 
     const [errorMsg, setErrorMsg] = useState('');

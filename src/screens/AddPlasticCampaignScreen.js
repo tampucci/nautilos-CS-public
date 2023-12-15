@@ -85,7 +85,7 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
                     placeholderTextColor="#667"
                 />
                 <TouchableOpacity onPress={() => {
-                    setViewBeachCodeModal(!viewBeachCodeModal)
+                    setViewBeachCodeModal(true)
                 }} style={styles.infoTextIcon}>
                     <Feather name="info" size={24} color="black" />
                 </TouchableOpacity>
@@ -94,7 +94,7 @@ const AddPlasticCampaignScreen = ({ route, navigation }) => {
                 <Checkbox style={styles.checkbox} value={beachAmendment} onValueChange={setAmendment} />
                 <Text style={styles.label}>Beach amendment</Text>
                 <TouchableOpacity onPress={() => {
-                    setViewAmendmentModal(!viewAmendmentModal)
+                    setViewAmendmentModal(true)
                 }} style={styles.infoCheckIcon}>
                     <Feather name="info" size={24} color="black" />
                 </TouchableOpacity>
