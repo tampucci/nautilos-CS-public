@@ -39,7 +39,7 @@ const AlgalbloomScreen = ({ route, navigation }) => {
         <ScrollView>
             <Text style={styles.title}>Algal Bloom</Text>
             {errorMsg !== '' ? <Text style={styles.errorMsg}>{errorMsg}</Text> : null}
-            <AddImageComponent navigation={navigation} type={'mandatory'} />
+            <AddImageComponent route={route} navigation={navigation} type={'mandatory'} latitude={latitude} longitude={longitude}  />
             <TextInput
                 style={styles.mandatoryInput}
                 onChangeText={setSpecies}

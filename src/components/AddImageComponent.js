@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 //import * as MediaLibrary from 'expo-media-library';
 import { FontAwesome } from '@expo/vector-icons';
 
-const AddImageComponent = ({ route, navigation, campaign, type }) => {
+const AddImageComponent = ({ route, navigation, campaign, latitude, longitude, type }) => {
 
     const { state, addImage, addMediaLibraryPermission } = useContext(AddDataContext)
     const [errorMsg, setErrorMsg] = useState(null);
@@ -16,7 +16,7 @@ const AddImageComponent = ({ route, navigation, campaign, type }) => {
             return;
         }
         addImage({ uri: pickerResult.assets[0].uri, base64: pickerResult.assets[0].base64 })
-        navigation.navigate(state.navigateBack, { image: pickerResult.assets[0].uri, campaign: campaign })
+        navigation.navigate(state.navigateBack, { image: pickerResult.assets[0].uri, campaign: campaign, latitude: latitude, longitude: longitude })
     };
 
     let openCameraPickerAsync = async () => {
@@ -60,7 +60,7 @@ const AddImageComponent = ({ route, navigation, campaign, type }) => {
 
 
         addImage({ uri: cameraResult.assets[0].uri, base64: cameraResult.assets[0].base64 })
-        navigation.navigate(state.navigateBack, {image: cameraResult.assets[0].uri, campaign: campaign })
+        navigation.navigate(state.navigateBack, {image: cameraResult.assets[0].uri, campaign: campaign, latitude: latitude, longitude: longitude  })
 
     }
 

@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
             }}>
                 <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
-            <Text style={styles.version}>Version: 1.4.2</Text>
+            <Text style={styles.version}>Version: 1.5.0</Text>
         </View>
     )
 }

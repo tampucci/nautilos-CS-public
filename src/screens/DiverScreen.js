@@ -21,10 +21,8 @@ const DiverScreen = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [, , addDiverCampaignApi] = new AddReport
 
-
     const [latitude, setLatitude] = useState(route.params.latitude)
     const [longitude, setLongitude] = useState(route.params.longitude)
-
     const { state, addResponse, addNavigateBack } = useContext(AddDataContext)
 
     useEffect(() => {
@@ -87,7 +85,7 @@ const DiverScreen = ({ route, navigation }) => {
                 placeholder={'Sea status'}
                 callback={(element) => { setSeaStatus(element) }}
             />
-            <AddImageComponent navigation={navigation} />
+            <AddImageComponent navigation={navigation} route={route} latitude={latitude} longitude={longitude} />
 
             <TouchableOpacity style={styles.button} onPress={async () => {                
                 if (parameterType !== '' && parameterValue !== '' && date !== null && latitude !== '' && longitude !== '') {
