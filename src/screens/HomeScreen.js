@@ -58,6 +58,11 @@ const HomeScreen = ({ route, navigation }) => {
                 navigation={navigation}
             />
             <InsertButton
+                name={"Classificator"}
+                navigateTo={"PlasticClassificator"}
+                navigation={navigation}
+            />
+            <InsertButton
                 name={"Diver Campaings"}
                 navigateTo={"Diver"}
                 navigation={navigation}

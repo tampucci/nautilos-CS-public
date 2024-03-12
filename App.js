@@ -13,6 +13,7 @@ import MapScreen from './src/screens/MapScreen';
 import AlgalbloomScreen from './src/screens/AlgalbloomScreen';
 import DiverScreen from './src/screens/DiverScreen';
 import ImageAnnotationScreen from './src/screens/ImageAnnotationScreen';
+import PlasticClassificatorScreen from './src/screens/PlasticClassificator';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ function App() {
             <Stack.Screen name="ImageAnnotation" component={ImageAnnotationScreen} />
             <Stack.Screen name="PickCoordinates" component={PickCoordinatesScreen} />
             <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name='PlasticClassificator' component={PlasticClassificatorScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </RetrieveDataProvider>
