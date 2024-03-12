@@ -10,25 +10,32 @@ export default () => {
 
     const addPlasticCampaignApi = async (navigation, name, date, latitude, longitude, contributor, location, beach, beachCode, beachAmendment, length, width, surrounding, sediment, weather, username, originator, authkey, setErrorMsg, setIsLoading) => {
         //TODO: ask for account to add data to erddap dataset
+
+        const search = '\\&'
+        const searchRegExp = new RegExp(search, 'g')
+        const replaceWith = '%26'
+
+        console.log('Name: '+name.replace(searchRegExp, replaceWith))
+
         try {
             await axios({
                 method: 'post',
                 url: 'https://nautilos-app.isti.cnr.it/addPlasticCampaign.php',
                 data: qs.stringify({
-                    name: name,
+                    name: name.replace(searchRegExp, replaceWith),
                     date: date.toISOString().slice(0, 10),
                     latitude: latitude,
                     longitude: longitude,
-                    location: location,
-                    contributor: contributor,
+                    location: location.replace(searchRegExp, replaceWith),
+                    contributor: contributor.replace(searchRegExp, replaceWith),
                     beach: beach,
-                    beachCode: beachCode,
+                    beachCode: beachCode.replace(searchRegExp, replaceWith),
                     beachAmendment: beachAmendment,
                     width: width,
                     length: length,
-                    surrounding: surrounding,
-                    sediment: sediment,
-                    weather: weather,
+                    surrounding: surrounding.replace(searchRegExp, replaceWith),
+                    sediment: sediment.replace(searchRegExp, replaceWith),
+                    weather: weather.replace(searchRegExp, replaceWith),
                     user: username,
                     originator: originator,
                     authkey: authkey
