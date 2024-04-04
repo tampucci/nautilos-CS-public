@@ -12,9 +12,7 @@ export default () => {
 
     const queryPlasticClassificator = async (navigation, image, setErrorMsg, setIsLoading) => {
         try {
-            console.log(image)
             if (image != '') {
-                console.log('Query start')
                 //Substitute all + occurencies in the string
                 await axios({
                     method: 'post',
@@ -23,14 +21,17 @@ export default () => {
                         image:image
                     })
                 }).then((response) => {
-                    console.log(response.data.result)
-                    /*if (response.data.status != 'success') {
+                    //console.log(response.data.data.input_image)
+                    if (response.data.status != 'success') {
                         setIsLoading(false)
-                        setErrorMsg("Image not added")
-                    }*/
-                    navigation.navigate('Home', { response: 'Classificator successfully queried' })
+                        setErrorMsg("Image not analysed")
+                    }
+                    navigation.navigate('ClassificationResult', 
+                    { 
+                        response: 'Classificator successfully queried', 
+                        images: [response.data.data.input_image, response.data.data.output_PLD, response.data.data.output_PLQ]
+                    })
                 })
-                console.log('Query end')
             } else {
                 console.log("I'm out")
             }

@@ -56,7 +56,7 @@ const PlasticClassificatorScreen = ({route, navigation}) => {
             {isLoading &&
                 <View style={styles.frontView}>
                     <ActivityIndicator size="large" color="black" style={styles.frontSpinner} />
-                    <Text style={styles.frontText}>Sending image</Text>
+                    <Text style={styles.frontText}>Analysing image</Text>
                 </View>
             }
         </View>

@@ -14,6 +14,7 @@ import AlgalbloomScreen from './src/screens/AlgalbloomScreen';
 import DiverScreen from './src/screens/DiverScreen';
 import ImageAnnotationScreen from './src/screens/ImageAnnotationScreen';
 import PlasticClassificatorScreen from './src/screens/PlasticClassificator';
+import ClassificationResult from './src/screens/ClassificationResultScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ function App() {
             <Stack.Screen name="PickCoordinates" component={PickCoordinatesScreen} />
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name='PlasticClassificator' component={PlasticClassificatorScreen} />
+            <Stack.Screen name='ClassificationResult' component={ClassificationResult} initialParams={{images: ['']}} />
           </Stack.Navigator>
         </NavigationContainer>
       </RetrieveDataProvider>
