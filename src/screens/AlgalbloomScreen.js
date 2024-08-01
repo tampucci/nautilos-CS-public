@@ -98,7 +98,7 @@ const AlgalbloomScreen = ({ route, navigation }) => {
             <TouchableOpacity style={styles.button} onPress={async () => {
                 if (state.image.uri !== '' && species !== '' && sampleVolume !== '' && date !== null && latitude !== '' && longitude !== '') {
                     setIsLoading(true)
-                    await addAlgalBloomApi(navigation, species, description.trim(), sampleVolume, date, latitude, longitude, location, depth.trim(), seaZone, bottomType, weather, state.image.base64, state.username, setErrorMsg, setIsLoading)
+                    await addAlgalBloomApi(navigation, species, description.trim(), sampleVolume, date, latitude, longitude, location, depth.trim(), seaZone, bottomType, weather, state.image.base64, state.username, state.authkey, setErrorMsg, setIsLoading)
                 } else {
                     setErrorMsg('You should fill all mandatory fields')
                 }

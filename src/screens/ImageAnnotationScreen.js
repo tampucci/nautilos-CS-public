@@ -90,7 +90,7 @@ const ImageAnnotationScreen = ({ route, navigation }) => {
             <TouchableOpacity style={styles.button} onPress={async () => {
                 if (state.image.uri !== '' && species !== '' && quantity !== '' && date !== null && latitude !== '' && longitude !== '') {
                     setIsLoading(true);
-                    await addImageAnnotationApi(navigation, species, quantity.trim(), date, latitude, longitude, location, depth.trim(), seaLevel, bottomType, weather, state.image.base64, state.username, setErrorMsg, setIsLoading)
+                    await addImageAnnotationApi(navigation, species, quantity.trim(), date, latitude, longitude, location, depth.trim(), seaLevel, bottomType, weather, state.image.base64, state.username, state.authkey, setErrorMsg, setIsLoading)
                 } else {
                     setErrorMsg('You should fill all mandatory fields')
                 }

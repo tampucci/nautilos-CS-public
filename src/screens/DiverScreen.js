@@ -90,7 +90,7 @@ const DiverScreen = ({ route, navigation }) => {
             <TouchableOpacity style={styles.button} onPress={async () => {                
                 if (parameterType !== '' && parameterValue !== '' && date !== null && latitude !== '' && longitude !== '') {
                     setIsLoading(true)
-                    await addDiverCampaignApi(navigation, parameterType, parameterValue.trim(), date, latitude, longitude, location, depth.trim(), bottomType, weather, seaStatus, state.image.base64, state.username, setErrorMsg, setIsLoading)
+                    await addDiverCampaignApi(navigation, parameterType, parameterValue.trim(), date, latitude, longitude, location, depth.trim(), bottomType, weather, seaStatus, state.image.base64, state.username, state.authkey, setErrorMsg, setIsLoading)
                 } else {
                     setErrorMsg('You should fill all mandatory fields')
                 }

@@ -14,9 +14,7 @@ export default () => {
         const search = '\\&'
         const searchRegExp = new RegExp(search, 'g')
         const replaceWith = '%26'
-
-        console.log('Name: '+name.replace(searchRegExp, replaceWith))
-
+        
         try {
             await axios({
                 method: 'post',
@@ -76,6 +74,7 @@ export default () => {
         let survey_code = '['
         let j_codes = '['
         let uid = '['
+        let imageExtension = ''
         let firstElement = true
 
         try {
@@ -84,7 +83,13 @@ export default () => {
                 const searchImage = '\\+';
                 const searchImageRegExp = new RegExp(searchImage, 'g'); // Throws SyntaxError
                 const replaceImageWith = '%2B';
-                image = '"data:image/png;base64,' + image.replace(searchImageRegExp, replaceImageWith) + '"'
+                /*if (image.substring(0,3)=='/9j' || image.substring(0,3)=='/9g') {
+                    imageExtension = 'jpeg'
+                } else if (image.substring(0,12)=='iVBORw0KGgo=') {*/
+                    imageExtension = 'png'
+                //}
+
+                image = '"data:image/' + imageExtension + ';base64,' + image.replace(searchImageRegExp, replaceImageWith) + '"'
 
                 await axios({
                     method: 'post',
@@ -171,8 +176,7 @@ export default () => {
         }
     }
 
-    const addDiverCampaignApi = async (navigation, parameterType, parameterValue, date, latitude, longitude, location, depth, seaBottom, weather, seaStatus, image, username, setErrorMsg, setIsLoading) => {
-        const author = "divercampaign_diV3rpw4"
+    const addDiverCampaignApi = async (navigation, parameterType, parameterValue, date, latitude, longitude, location, depth, seaBottom, weather, seaStatus, image, username, authkey, setErrorMsg, setIsLoading) => {
         try {
             if (image != '') {
                 const searchImage = '\\+';
@@ -186,20 +190,81 @@ export default () => {
 
             await axios({
                 method: 'post',
-                url: 'https://data-nautilos-h2020.eu/erddap/tabledap/diver_campaign.insert?' +
-                    'measured_parameter=' + parameterType +
-                    '&measured_value=' + parameterValue.replace(searchRegExp, replaceWith) +
-                    '&date=' + date.toISOString().slice(0, 19) +
-                    '&latitude=' + latitude.toString().replace(searchRegExp, replaceWith) +
-                    '&longitude=' + longitude.toString().replace(searchRegExp, replaceWith) +
-                    '&location_name=' + location.replace(searchRegExp, replaceWith) +
-                    '&depth=' + depth.replace(searchRegExp, replaceWith) +
-                    '&sea_bottom_type=' + seaBottom +
-                    '&weather_type=' + weather +
-                    '&sea_status=' + seaStatus +
-                    '&image=' + image +
-                    '&user=' + username +
-                    '&author=' + author
+                url: 'https://nautilos-app.isti.cnr.it/addDiverCampaign.php',
+                data: qs.stringify({
+                    user: username,
+                    measuredParameter: parameterType,
+                    measuredValue: parameterValue,
+                    date: date.toISOString().slice(0, 10),
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location.replace(searchRegExp, replaceWith),
+                    depth: depth,
+                    seaBottom: seaBottom,
+                    weather: weather,
+                    seaStatus: seaStatus,
+                    image: image,
+                    authkey: authkey
+                })
+            }).then((response) => {
+                if (response.data.status === 'success') {
+                    addImage({ uri: '', base64: '' })
+                    addResponse({ message: 'Report successfully added', report_n: state.report_n + 1 })
+                    navigation.navigate('Home', { response: 'Report successfully added' })
+                } else {
+                    setIsLoading(false)
+                    setErrorMsg("Report not sent")
+                }
+            }, (error) => {
+                console.log(error)
+                setIsLoading(false)
+                setErrorMsg("Report not sent");
+                if (error.response) {
+                    if (error.response.data.split('Query error: ')[1] !== undefined) {
+                        let errorResponse = error.response.data.split('Query error: ')[1];
+                        errorResponse = errorResponse.slice(0, errorResponse.length - 5)
+                        if (errorResponse.split('=')[1] !== undefined) {
+                            errorResponse = errorResponse.split('=')[1];
+                        }
+                        setErrorMsg(errorResponse)
+                    }
+                }
+            });
+        } catch (e) {
+            setErrorMessage('Error meanwhile communicating with server')
+        }
+    }
+
+    const addImageAnnotationApi = async (navigation, species, quantity, date, latitude, longitude, location, depth, seaLevel, seaBottom, weather, image, username, authkey, setErrorMsg, setIsLoading) => {
+        try {
+            if (image != '') {
+                const searchImage = '\\+';
+                const searchImageRegExp = new RegExp(searchImage, 'g'); // Throws SyntaxError
+                const replaceImageWith = '%2B';
+                image = 'data:image/png;base64,' + image.replace(searchImageRegExp, replaceImageWith)
+            }
+            const search = '\\&'
+            const searchRegExp = new RegExp(search, 'g')
+            const replaceWith = '%26'
+
+            await axios({
+                method: 'post',
+                url: 'https://nautilos-app.isti.cnr.it/addImageAnnotation.php',
+                data: qs.stringify({
+                    user: username,
+                    authkey: authkey,
+                    species: species.replace(searchRegExp, replaceWith),
+                    quantity: quantity,
+                    date: date.toISOString().slice(0, 10),
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location.replace(searchRegExp, replaceWith),
+                    depth: depth,
+                    seaBottom: seaBottom,
+                    weather: weather,
+                    seaLevel: seaLevel,
+                    image: image
+                })
             }).then((response) => {
                 if (response.data.status === 'success') {
                     addImage({ uri: '', base64: '' })
@@ -228,8 +293,7 @@ export default () => {
         }
     }
 
-    const addImageAnnotationApi = async (navigation, species, quantity, date, latitude, longitude, location, depth, seaLevel, seaBottom, weather, image, username, setErrorMsg, setIsLoading) => {
-        const author = "imageannotation_iM4GEpw4"
+    const addAlgalBloomApi = async (navigation, species, description, sampleVolume, date, latitude, longitude, location, depth, seaZone, seaBottom, weather, image, username, authkey, setErrorMsg, setIsLoading) => {
         try {
             if (image != '') {
                 const searchImage = '\\+';
@@ -243,78 +307,23 @@ export default () => {
 
             await axios({
                 method: 'post',
-                url: 'https://data-nautilos-h2020.eu/erddap/tabledap/image_annotation.insert?' +
-                    'species_taxom_name=' + species.replace(searchRegExp, replaceWith) +
-                    '&quantity=' + quantity.replace(searchRegExp, replaceWith) +
-                    '&date=' + date.toISOString().slice(0, 19) +
-                    '&latitude=' + latitude.toString().replace(searchRegExp, replaceWith) +
-                    '&longitude=' + longitude.toString().replace(searchRegExp, replaceWith) +
-                    '&location_name=' + location.replace(searchRegExp, replaceWith) +
-                    '&depth=' + depth.replace(searchRegExp, replaceWith) +
-                    '&sea_level=' + seaLevel +
-                    '&sea_bottom_type=' + seaBottom +
-                    '&weather_type=' + weather +
-                    '&image=' + image +
-                    '&user=' + username +
-                    '&author=' + author
-            }).then((response) => {
-                if (response.data.status === 'success') {
-                    addImage({ uri: '', base64: '' })
-                    addResponse({ message: 'Report successfully added', report_n: state.report_n + 1 })
-                    navigation.navigate('Home', { response: 'Report successfully added' })
-                } else {
-                    setIsLoading(false)
-                    setErrorMsg("Report not sent")
-                }
-            }, (error) => {
-                setIsLoading(false)
-                setErrorMsg("Report not sent");
-                if (error.response) {
-                    if (error.response.data.split('Query error: ')[1] !== undefined) {
-                        let errorResponse = error.response.data.split('Query error: ')[1];
-                        errorResponse = errorResponse.slice(0, errorResponse.length - 5)
-                        if (errorResponse.split('=')[1] !== undefined) {
-                            errorResponse = errorResponse.split('=')[1];
-                        }
-                        setErrorMsg(errorResponse)
-                    }
-                }
-            });
-        } catch (e) {
-            setErrorMessage('Error meanwhile communicating with server')
-        }
-    }
-
-    const addAlgalBloomApi = async (navigation, species, description, sampleVolume, date, latitude, longitude, location, depth, seaZone, seaBottom, weather, image, username, setErrorMsg, setIsLoading) => {
-        const author = "algalbloom_4Lg4lpw4"
-        try {
-            if (image != '') {
-                const searchImage = '\\+';
-                const searchImageRegExp = new RegExp(searchImage, 'g'); // Throws SyntaxError
-                const replaceImageWith = '%2B';
-                image = 'data:image/png;base64,' + image.replace(searchImageRegExp, replaceImageWith)
-            }
-            const search = '\\&'
-            const searchRegExp = new RegExp(search, 'g')
-            const replaceWith = '%26'
-
-            await axios({
-                method: 'post',
-                url: 'https://data-nautilos-h2020.eu/erddap/tabledap/algal_bloom.insert?' +
-                    'species_taxom_name=' + species.replace(searchRegExp, replaceWith) +
-                    '&sample_volume=' + sampleVolume.replace(searchRegExp, replaceWith) +
-                    '&date=' + date.toISOString().slice(0, 19) +
-                    '&latitude=' + latitude.toString().replace(searchRegExp, replaceWith) +
-                    '&longitude=' + longitude.toString().replace(searchRegExp, replaceWith) +
-                    '&location_name=' + location.replace(searchRegExp, replaceWith) +
-                    '&depth=' + depth.replace(searchRegExp, replaceWith) +
-                    '&sea_zone=' + seaZone +
-                    '&sea_bottom_type=' + seaBottom +
-                    '&weather_type=' + weather +
-                    '&image=' + image +
-                    '&description=' + description.replace(searchRegExp, replaceWith) +
-                    '&user=' + username +
-                    '&author=' + author
+                url: 'https://nautilos-app.isti.cnr.it/addAlgalBloom.php',
+                data: qs.stringify({
+                    user: username,
+                    authkey: authkey,
+                    species: species.replace(searchRegExp, replaceWith),
+                    sampleVolume: sampleVolume,
+                    date: date.toISOString().slice(0, 19),
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location.replace(searchRegExp, replaceWith),
+                    depth: depth,
+                    seaZone: seaZone,
+                    seaBottom: seaBottom,
+                    weather: weather,
+                    image: image,
+                    description: description.replace(searchRegExp, replaceWith)
+                })
             }).then((response) => {
                 if (response.data.status === 'success') {
                     addImage({ uri: '', base64: '' })
